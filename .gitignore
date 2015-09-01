@@ -1,0 +1,4 @@
+*.class
+jhotdraw7.2/build/
+jhotdraw7.2/dist/
+jhotdraw7.2/nbproject/
