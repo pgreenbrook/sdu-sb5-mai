@@ -1531,4 +1531,73 @@ public class ButtonFactory {
         btn.setFocusable(false);
         return btn;
     }
+    
+    /**
+     * Creates a button that adds a new gradient-handle to the selected figure.
+     */
+    public static JButton createAddGradientHandleButton(DrawingEditor editor, ResourceBundleUtil labels) {
+        JButton btn;
+        btn = new JButton(new AddGradientHandleAction(editor));
+        labels.configureButton(btn, "attribute.fillAddGradientHandle");
+        if (btn.getIcon() != null) {
+            btn.putClientProperty("hideActionText", Boolean.TRUE);
+        }
+        btn.setHorizontalTextPosition(JButton.CENTER);
+        btn.setVerticalTextPosition(JButton.BOTTOM);
+        btn.setText(null);
+        btn.setFocusable(false);
+        return btn;
+    }
+    
+    /**
+     * Creates a button that removes the currently selected gradient-handle from the selected figure.
+     */
+    public static JButton createRemoveGradientHandleButton(DrawingEditor editor, ResourceBundleUtil labels) {
+        JButton btn;
+        btn = new JButton(new RemoveGradientHandleAction(editor));
+        labels.configureButton(btn, "attribute.fillRemoveGradientHandle");
+        if (btn.getIcon() != null) {
+            btn.putClientProperty("hideActionText", Boolean.TRUE);
+        }
+        btn.setHorizontalTextPosition(JButton.CENTER);
+        btn.setVerticalTextPosition(JButton.BOTTOM);
+        btn.setText(null);
+        btn.setFocusable(false);
+        return btn;
+    }
+    
+    
+    public static AbstractButton createGradientHandleSelectorButton(ResourceBundleUtil labels) {
+
+        final JPopupButton popupButton = new JPopupButton();
+
+        labels.configureToolBarButton(popupButton, "attribute.fillGradientHandleSelector");
+        popupButton.setFocusable(false);
+        // TODO: Set text when selected handle.
+        /* popupButton.setText((int) (view.getScaleFactor() * 100) + " %"); */
+
+        
+        // TODO: Set text when selecting another handle.
+        /*view.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                popupButton.setText((int) (view.getScaleFactor() * 100) + " %");
+            }
+        });*/
+
+        // TODO: Get all gradienthandles for selected figure.
+        /*for (int i = 0; i < factors.length; i++) {
+            popupButton.add(
+                new ZoomAction(view, factors[i], zoomPopupButton) {
+
+                    @Override
+                    @FeatureEntryPoint(JHotDrawFeatures.VIEW_PALETTE)
+                    public void actionPerformed(java.awt.event.ActionEvent e) {
+                        super.actionPerformed(e);
+                        popupButton.setText((int) (view.getScaleFactor() * 100) + " %");
+                    }
+                });
+        }*/
+        popupButton.setFocusable(false);
+        return popupButton;
+    }
 }
