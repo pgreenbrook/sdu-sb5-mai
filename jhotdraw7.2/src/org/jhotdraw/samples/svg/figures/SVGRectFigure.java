@@ -300,6 +300,7 @@ public class SVGRectFigure extends SVGAttributedFigure implements SVGFigure {
                 ResizeHandleKit.addResizeHandles(this, handles);
                 handles.add(new SVGRectRadiusHandle(this));
                 handles.add(new LinkHandle(this));
+                GradientHandleKit.addGradientHandles(this, handles);
                 break;
             case 1:
                 TransformHandleKit.addTransformHandles(this, handles);
