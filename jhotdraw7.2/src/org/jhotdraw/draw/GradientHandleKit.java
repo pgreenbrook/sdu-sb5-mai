@@ -21,14 +21,17 @@ public class GradientHandleKit {
     }
     
     static public void addGradientHandles(Figure f, Collection<Handle> handles) {
-        handles.add(new GradientHandle(f));
+        if(f instanceof AbstractAttributedFigure) {
+            AbstractAttributedFigure svgFigure = (AbstractAttributedFigure) f;
+            handles.add(new GradientHandle(svgFigure));
+        }
     }
     
     private static class GradientHandle extends AbstractHandle {
         
         public int dx, dy;
         
-        public GradientHandle(Figure owner) {
+        public GradientHandle(AbstractAttributedFigure owner) {
             super(owner);
         }
 
@@ -39,7 +42,7 @@ public class GradientHandleKit {
         }
     
         private Point locate() {
-            AbstractFigure owner = (AbstractFigure) getOwner();
+            AbstractAttributedFigure owner = (AbstractAttributedFigure) getOwner();
             Rectangle2D.Double r = owner.getBounds();
             Point2D.Double p = new Point2D.Double(
                     r.x + (owner.getPreferredSize().getWidth() / 2) + dx, 
