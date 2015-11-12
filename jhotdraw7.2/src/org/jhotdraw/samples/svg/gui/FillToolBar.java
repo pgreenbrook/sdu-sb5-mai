@@ -85,95 +85,48 @@ public class FillToolBar extends AbstractToolBar {
     @FeatureEntryPoint(JHotDrawFeatures.FILL_PALETTE)
     protected JComponent createDisclosedComponent(int state) {
         JPanel p = null;
+        
+        System.out.println("create " + fillState + " " + getParent());
+        
+        if(state == 1 || state == 2) {
+            p = new JPanel();
+            p.setOpaque(false);
+            
+            JPanel selectorPanel = new JPanel(new GridBagLayout());
+            selectorPanel.setOpaque(false);
+                    
+            p.setBorder(new EmptyBorder(5, 5, 5, 8));
+            p.removeAll();
 
-        switch (state) {
-            case 1:
-                 {
-                    p = new JPanel();
-                    p.setOpaque(false);
-                    
-                    JPanel selectorPanel = new JPanel(new GridBagLayout());
-                    selectorPanel.setOpaque(false);
-
-                    p.setBorder(new EmptyBorder(5, 5, 5, 8));
-                    p.removeAll();
-
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
-                    GridBagLayout layout = new GridBagLayout();
-                    p.setLayout(layout);
-                    GridBagConstraints gbc;
-                    AbstractButton btn;
-                    
-                    
-                    // Gradient-handle selector
-                    btn = ButtonFactory.createGradientHandleSelectorButton(getEditor(), this, labels);
-                    btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
-                    btn.setText(fillState.getPrettyName());
-                    gbc = new GridBagConstraints();
-                    gbc.gridx = 0;
-                    gbc.gridy = 0;
-                    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                    gbc.insets = new Insets(0, 3, 0, 0);
-                    selectorPanel.add(btn, gbc);
-                    
-                    // Create fill panel
-                    JPanel fillPanel = FillPanelFactory.createPanel(fillState, state);
-                    
-                    // Add horizontal strips
-                    gbc = new GridBagConstraints();
-                    gbc.gridy = 0;
-                    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                    p.add(selectorPanel, gbc);
-                    gbc = new GridBagConstraints();
-                    gbc.insets = new Insets(3, 0, 0, 0);
-                    gbc.gridy = 1;
-                    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                    p.add(fillPanel, gbc);
-                }
-                break;
-
-            case 2:
-                 {
-                    p = new JPanel();
-                    p.setOpaque(false);
-                    
-                    JPanel selectorPanel = new JPanel(new GridBagLayout());
-                    selectorPanel.setOpaque(false);
-
-                    p.setBorder(new EmptyBorder(5, 5, 5, 8));
-                    p.removeAll();
-
-                    ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
-                    GridBagLayout layout = new GridBagLayout();
-                    p.setLayout(layout);
-                    GridBagConstraints gbc;
-                    AbstractButton btn;
-                    
-                    // Gradient-handle selector
-                    btn = ButtonFactory.createGradientHandleSelectorButton(labels);
-                    btn = ButtonFactory.createGradientHandleSelectorButton(getEditor(), this, labels);
-                    btn.setText(fillState.getPrettyName());
-                    gbc = new GridBagConstraints();
-                    gbc.gridx = 0;
-                    gbc.gridy = 0;
-                    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                    selectorPanel.add(btn, gbc);
-                    
-                    // Create fill panel
-                    JPanel fillPanel = FillPanelFactory.createPanel(fillState, state);
-
-                    // Add horizontal strips
-                    gbc = new GridBagConstraints();
-                    gbc.gridy = 0;
-                    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                    p.add(selectorPanel, gbc);
-                    gbc = new GridBagConstraints();
-                    gbc.insets = new Insets(3, 0, 0, 0);
-                    gbc.gridy = 1;
-                    gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-                    p.add(fillPanel, gbc);
-                }
-                break;
+            ResourceBundleUtil labels = ResourceBundleUtil.getBundle("org.jhotdraw.samples.svg.Labels");
+            GridBagLayout layout = new GridBagLayout();
+            p.setLayout(layout);
+            GridBagConstraints gbc;
+            AbstractButton btn;
+            
+            // Gradient-handle selector
+            btn = ButtonFactory.createGradientHandleSelectorButton(getEditor(), this, labels);
+            btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+            btn.setText(fillState.getPrettyName());
+            gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            selectorPanel.add(btn, gbc);
+            
+            // Create fill panel
+            JPanel fillPanel = FillPanelFactory.createPanel(this, state, getEditor(), labels);
+ 
+            // Add horizontal strips
+            gbc = new GridBagConstraints();
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            p.add(selectorPanel, gbc);
+            gbc = new GridBagConstraints();
+            gbc.insets = new Insets(3, 0, 0, 0);
+            gbc.gridy = 1;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            p.add(fillPanel, gbc);
         }
         return p;
     }
@@ -191,8 +144,11 @@ public class FillToolBar extends AbstractToolBar {
         this.fillState = fillState;
         
         // Force UI rebuild if FillToolBar is shown.
+        System.out.println(fillState + " " + getParent());
         if(getParent() != null) {
-            this.setDisclosureState(getDisclosureState());
+            int oldState = getDisclosureState();
+            setDisclosureState(0);
+            setDisclosureState(oldState);
         }
     }
     
@@ -202,40 +158,119 @@ public class FillToolBar extends AbstractToolBar {
     
     public static class FillPanelFactory {
 
-        public static JPanel createPanel(FillToolBar.FillState fillState, int toolbarState) {
+        public static JPanel createPanel(FillToolBar fillToolBar, int toolbarState, DrawingEditor editor, ResourceBundleUtil labels) {
             JPanel panel = new JPanel(new GridBagLayout());
             
-            switch(fillState) {
+            switch(fillToolBar.getFillState()) {
                 case SOLID:
-                    panel = createSolidFillPanel(toolbarState);
+                    panel = createSolidFillPanel(fillToolBar, toolbarState, editor, labels);
                     break;
-                    
+                     
                 case LINEAR_GRADIENT:
-                    panel = createLinearGradientPanel(toolbarState);
+                    panel = createLinearGradientPanel(fillToolBar, toolbarState, editor, labels);
                     break;
-                    
+                     
                 case RADIAL_GRADIENT:
-                    panel = createRadialGradientPanel(toolbarState);
+                    panel = createRadialGradientPanel(fillToolBar, toolbarState, editor, labels);
                     break;
+             }
+            return panel;
+        }
+        
+        private static JPanel createSolidFillPanel(FillToolBar fillToolBar, int toolbarState, DrawingEditor editor, ResourceBundleUtil labels) {
+            JPanel panel = new JPanel(new GridBagLayout());
+            
+            JPanel rowOne = new JPanel(new GridBagLayout());
+            JPanel rowTwo = new JPanel(new GridBagLayout());
+            
+            // Row one, fill color field and button
+            Map<AttributeKey, Object> defaultAttributes = new HashMap<AttributeKey, Object>();
+            FILL_GRADIENT.set(defaultAttributes, null);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            if(toolbarState == 2) {
+                JAttributeTextField<Color> colorField = new JAttributeTextField<Color>();
+                colorField.setColumns(7);
+                colorField.setToolTipText(labels.getString("attribute.fillColor.toolTipText"));
+                colorField.putClientProperty("Palette.Component.segmentPosition", "first");
+                colorField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(colorField));
+                colorField.setFormatterFactory(ColorFormatter.createFormatterFactory());
+                colorField.setHorizontalAlignment(JTextField.LEFT);
+                new FigureAttributeEditorHandler<Color>(FILL_COLOR, defaultAttributes, colorField, editor, true);
+                rowOne.add(colorField, gbc);
             }
+            JButton btn = ButtonFactory.createSelectionColorButton(editor,
+                    FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
+                    "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
+            btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
+            ((JPopupButton) btn).setAction(null, null);
+            gbc = new GridBagConstraints();
+            gbc.gridx = 1;
+            gbc.gridwidth = 2;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            rowOne.add(btn, gbc);
+            
+            
+            // Row two, opacity field with slider
+            gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.insets = new Insets(3, 0, 0, 0);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            if(toolbarState == 2) {
+                JAttributeTextField<Double> opacityField = new JAttributeTextField<Double>();
+                opacityField.setColumns(3);
+                opacityField.setToolTipText(labels.getString("attribute.fillOpacity.toolTipText"));
+                opacityField.putClientProperty("Palette.Component.segmentPosition", "first");
+                opacityField.setUI((PaletteFormattedTextFieldUI) PaletteFormattedTextFieldUI.createUI(opacityField));
+                opacityField.setFormatterFactory(JavaNumberFormatter.createFormatterFactory(0d, 1d, 100d));
+                opacityField.setHorizontalAlignment(JTextField.LEFT);
+                new FigureAttributeEditorHandler<Double>(FILL_OPACITY, opacityField, editor);
+                rowTwo.add(opacityField, gbc);
+            }
+            JPopupButton opacityPopupButton = new JPopupButton();
+            JAttributeSlider opacitySlider = new JAttributeSlider(JSlider.VERTICAL, 0, 100, 100);
+            opacityPopupButton.add(opacitySlider);
+            labels.configureToolBarButton(opacityPopupButton, "attribute.fillOpacity");
+            opacityPopupButton.setUI((PaletteButtonUI) PaletteButtonUI.createUI(opacityPopupButton));
+            opacityPopupButton.setPopupAnchor(SOUTH_EAST);
+            opacityPopupButton.setIcon(
+                    new SelectionOpacityIcon(editor, FILL_OPACITY, FILL_COLOR, null, fillToolBar.getClass().getResource(labels.getString("attribute.fillOpacity.icon")),
+                    new Rectangle(5, 5, 6, 6), new Rectangle(4, 4, 7, 7)));
+            opacityPopupButton.setPopupAnchor(SOUTH_EAST);
+            new SelectionComponentRepainter(editor, opacityPopupButton);
+            gbc = new GridBagConstraints();
+            gbc.gridx = 1;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            gbc.weighty = 1f;
+            gbc.insets = new Insets(3, 0, 0, 0);
+            rowTwo.add(opacityPopupButton, gbc);
+            opacitySlider.setUI((SliderUI) PaletteSliderUI.createUI(opacitySlider));
+            opacitySlider.setScaleFactor(100d);
+            new FigureAttributeEditorHandler<Double>(FILL_OPACITY, opacitySlider, editor);
+            
+            gbc = new GridBagConstraints();
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            panel.add(rowOne, gbc);
+            gbc = new GridBagConstraints();
+            gbc.gridy = 1;
+            gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+            panel.add(rowTwo, gbc);
+            
             return panel;
         }
         
-        private static JPanel createSolidFillPanel(int toolbarState) {
+        private static JPanel createLinearGradientPanel(FillToolBar fillToolBar, int toolbarState, DrawingEditor editor, ResourceBundleUtil labels) {
             JPanel panel = new JPanel(new GridBagLayout());
             
             
             return panel;
         }
         
-        private static JPanel createLinearGradientPanel(int toolbarState) {
-            JPanel panel = new JPanel(new GridBagLayout());
-            
-            
-            return panel;
-        }
-        
-        private static JPanel createRadialGradientPanel(int toolbarState) {
+        private static JPanel createRadialGradientPanel(FillToolBar fillToolBar, int toolbarState, DrawingEditor editor, ResourceBundleUtil labels) {
             JPanel panel = new JPanel(new GridBagLayout());
             
             
