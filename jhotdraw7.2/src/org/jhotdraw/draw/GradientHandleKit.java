@@ -37,7 +37,8 @@ public class GradientHandleKit {
             handles.add(new LinearGradientHandleTwo(f));
         }
         else if(g instanceof RadialGradient) {
-            
+            handles.add(new RadialGradientCenterHandle(f));
+            handles.add(new RadialGradientFocalPointHandle(f));
         }
     }
     
@@ -121,9 +122,9 @@ public class GradientHandleKit {
             
             Rectangle2D.Double r = owner.getBounds();
             Point2D.Double p = new Point2D.Double(
-                    r.x + (owner.getPreferredSize().getWidth() * g.getX2()),
-                    r.y + (owner.getPreferredSize().getHeight() * g.getY2())
-                    );
+                r.x + (owner.getPreferredSize().getWidth() * g.getX2()),
+                r.y + (owner.getPreferredSize().getHeight() * g.getY2())
+            );
             if (TRANSFORM.get(owner) != null) {
                 TRANSFORM.get(owner).transform(p, p);
             }
@@ -148,8 +149,134 @@ public class GradientHandleKit {
             if (TRANSFORM.get(owner) != null) {
                 try {
                     TRANSFORM.get(owner).inverseTransform(p, p);
-                } catch (NoninvertibleTransformException ex) {
+                }
+                catch (NoninvertibleTransformException ex) {
+                }
+            }
+            owner.changed();
+        }
 
+        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
+            // TODO fireUndoableEdit
+        }
+
+        @Override
+        public void draw(Graphics2D g) {
+            drawCircle(g, Color.ORANGE, Color.BLACK);
+        }
+        
+    }
+    
+    private static class RadialGradientCenterHandle extends AbstractHandle {
+        
+        public RadialGradientCenterHandle(Figure owner) {
+            super(owner);
+        }
+
+        protected Rectangle basicGetBounds() {
+            Rectangle r = new Rectangle(locate());
+            r.grow(getHandlesize() / 2 + 1, getHandlesize() / 2 + 1);
+            return r;
+        }
+    
+        private Point locate() {
+            Figure owner = getOwner();
+            RadialGradient g = (RadialGradient) owner.getAttribute(FILL_GRADIENT);
+            
+            Rectangle2D.Double r = owner.getBounds();
+            Point2D.Double p = new Point2D.Double(
+                r.x + (owner.getPreferredSize().getWidth() * g.getCX()),
+                r.y + (owner.getPreferredSize().getHeight() * g.getCY())
+            );
+            if (TRANSFORM.get(owner) != null) {
+                TRANSFORM.get(owner).transform(p, p);
+            }
+            return view.drawingToView(p);
+        }
+
+        public void trackStart(Point anchor, int modifiersEx) {
+            
+        }
+
+        public void trackStep(Point anchor, Point lead, int modifiersEx) {
+            Figure owner = getOwner();
+            RadialGradient g = (RadialGradient) owner.getAttribute(FILL_GRADIENT);
+            
+            Point2D.Double p = view.viewToDrawing(lead);
+            owner.willChange();
+            
+            double x = (p.x - owner.getBounds().x) / owner.getPreferredSize().getWidth();
+            double y = (p.y - owner.getBounds().y) / owner.getPreferredSize().getHeight();
+            g.setGradientCircle(x, y, g.getR());
+            
+            if (TRANSFORM.get(owner) != null) {
+                try {
+                    TRANSFORM.get(owner).inverseTransform(p, p);
+                }
+                catch (NoninvertibleTransformException ex) {
+                }
+            }
+            owner.changed();
+        }
+
+        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
+            // TODO fireUndoableEdit
+        }
+
+        @Override
+        public void draw(Graphics2D g) {
+            drawCircle(g, Color.ORANGE, Color.BLACK);
+        }
+        
+    }
+    
+    private static class RadialGradientFocalPointHandle extends AbstractHandle {
+        
+        public RadialGradientFocalPointHandle(Figure owner) {
+            super(owner);
+        }
+
+        protected Rectangle basicGetBounds() {
+            Rectangle r = new Rectangle(locate());
+            r.grow(getHandlesize() / 2 + 1, getHandlesize() / 2 + 1);
+            return r;
+        }
+    
+        private Point locate() {
+            Figure owner = getOwner();
+            RadialGradient g = (RadialGradient) owner.getAttribute(FILL_GRADIENT);
+            
+            Rectangle2D.Double r = owner.getBounds();
+            Point2D.Double p = new Point2D.Double(
+                r.x + (owner.getPreferredSize().getWidth() * g.getFX()),
+                r.y + (owner.getPreferredSize().getHeight() * g.getFY())
+            );
+            if (TRANSFORM.get(owner) != null) {
+                TRANSFORM.get(owner).transform(p, p);
+            }
+            return view.drawingToView(p);
+        }
+
+        public void trackStart(Point anchor, int modifiersEx) {
+            
+        }
+
+        public void trackStep(Point anchor, Point lead, int modifiersEx) {
+            Figure owner = getOwner();
+            RadialGradient g = (RadialGradient) owner.getAttribute(FILL_GRADIENT);
+            
+            Point2D.Double p = view.viewToDrawing(lead);
+            owner.willChange();
+            
+            double x = (p.x - owner.getBounds().x) / owner.getPreferredSize().getWidth();
+            double y = (p.y - owner.getBounds().y) / owner.getPreferredSize().getHeight();
+            g.setFocalPoint(x, y);
+            
+            if (TRANSFORM.get(owner) != null) {
+                try {
+                    TRANSFORM.get(owner).inverseTransform(p, p);
+                }
+                catch (NoninvertibleTransformException ex) {
                 }
             }
             owner.changed();

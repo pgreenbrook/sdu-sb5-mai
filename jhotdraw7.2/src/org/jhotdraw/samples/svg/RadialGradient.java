@@ -66,6 +66,10 @@ public class RadialGradient implements Gradient {
         this.cy = cy;
         this.r = r;
     }
+    public void setFocalPoint(double fx, double fy) {
+        this.fx = fx;
+        this.fy = fy;
+    }
     public void setStops(double[] offsets, Color[] colors, double[] stopOpacities) {
         this.stopOffsets = offsets;
         this.stopColors = colors;
