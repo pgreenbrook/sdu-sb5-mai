@@ -117,6 +117,11 @@ public /*abstract*/ class AbstractToolBar extends JDisclosureToolBar {
     protected int getDefaultDisclosureState() {
         return 0;
     }
+    
+    protected void rebuildPanels() {
+        panels = null;
+        setDisclosureState(getDisclosureState());
+    }
 
     private class ProxyPanel extends JPanel {
 
