@@ -74,7 +74,6 @@ public class ChangeGradientAction extends AbstractSelectedAction {
             }
             f.willChange();
             f.setAttribute(SVGAttributeKeys.FILL_GRADIENT, newGradient);
-            f.changed();
             
             UndoableEdit edit = new AbstractUndoableEdit() {
                 @Override
@@ -99,6 +98,7 @@ public class ChangeGradientAction extends AbstractSelectedAction {
             };
             fireUndoableEditHappened(edit);
             getView().repaintHandles();
+            f.changed();
         }
     }
 }
