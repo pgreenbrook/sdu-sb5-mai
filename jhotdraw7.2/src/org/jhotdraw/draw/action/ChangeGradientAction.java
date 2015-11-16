@@ -15,6 +15,7 @@ import org.jhotdraw.samples.svg.Gradient;
 import org.jhotdraw.samples.svg.LinearGradient;
 import org.jhotdraw.samples.svg.RadialGradient;
 import org.jhotdraw.samples.svg.SVGAttributeKeys;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
 import org.jhotdraw.samples.svg.gui.FillToolBar.GradientType;
 
 /**
@@ -59,6 +60,8 @@ public class ChangeGradientAction extends AbstractSelectedAction {
                 break;
         }
         
+        getEditor().setDefaultAttribute(FILL_GRADIENT, g);
+        
         for(final Figure f : getView().getSelectedFigures()) {
             final Gradient newGradient = g;
             final Gradient oldGradient = f.getAttribute(SVGAttributeKeys.FILL_GRADIENT);
@@ -84,15 +87,18 @@ public class ChangeGradientAction extends AbstractSelectedAction {
                 public void redo() throws CannotRedoException {
                     super.redo();
                     f.setAttribute(SVGAttributeKeys.FILL_GRADIENT, newGradient);
+                    getView().repaintHandles();
                 }
 
                 @Override
                 public void undo() throws CannotUndoException {
                     f.setAttribute(SVGAttributeKeys.FILL_GRADIENT, oldGradient);
+                    getView().repaintHandles();
                     super.undo();
                 }
             };
             fireUndoableEditHappened(edit);
+            getView().repaintHandles();
         }
     }
 }
