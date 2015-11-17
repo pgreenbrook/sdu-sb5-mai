@@ -17,10 +17,13 @@ import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
 import javax.swing.border.*;
 import org.jhotdraw.util.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 import static javax.swing.SwingConstants.SOUTH_EAST;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.plaf.LabelUI;
 import javax.swing.plaf.SliderUI;
 import org.jhotdraw.app.JHotDrawFeatures;
@@ -346,8 +349,14 @@ public class FillToolBar extends AbstractToolBar {
             rowOne.add(opacityPopupButton, gbc);
             opacitySlider.setUI((SliderUI) PaletteSliderUI.createUI(opacitySlider));
             opacitySlider.setScaleFactor(100d);
-            new FigureAttributeEditorHandler<Double>(FILL_OPACITY, opacitySlider, editor);
-            
+            opacitySlider.setAttributeValue(100d);
+            final Action lRow1 = new SelectionGradientOpacityChooserAction(editor, 0, opacitySlider, FILL_GRADIENT);
+            opacitySlider.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent ce) {
+                    lRow1.actionPerformed(new ActionEvent(this, 0, ""));
+                }
+            });
+           
             
             // Row two, fill color field and button, opacity slider. (stop 2)
             FILL_GRADIENT.set(defaultAttributes, null);
@@ -418,7 +427,13 @@ public class FillToolBar extends AbstractToolBar {
             rowOne.add(opacityPopupButton, gbc);
             opacitySlider.setUI((SliderUI) PaletteSliderUI.createUI(opacitySlider));
             opacitySlider.setScaleFactor(100d);
-            new FigureAttributeEditorHandler<Double>(FILL_OPACITY, opacitySlider, editor);
+            opacitySlider.setAttributeValue(100d);
+            final Action lRow2 = new SelectionGradientOpacityChooserAction(editor, 1, opacitySlider, FILL_GRADIENT);
+            opacitySlider.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent ce) {
+                    lRow2.actionPerformed(new ActionEvent(this, 0, ""));
+                }
+            });
             
             
             
@@ -514,7 +529,13 @@ public class FillToolBar extends AbstractToolBar {
             rowOne.add(opacityPopupButton, gbc);
             opacitySlider.setUI((SliderUI) PaletteSliderUI.createUI(opacitySlider));
             opacitySlider.setScaleFactor(100d);
-            new FigureAttributeEditorHandler<Double>(FILL_OPACITY, opacitySlider, editor);
+            opacitySlider.setAttributeValue(100d);
+            final Action rRow1 = new SelectionGradientOpacityChooserAction(editor, 1, opacitySlider, FILL_GRADIENT);
+            opacitySlider.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent ce) {
+                    rRow1.actionPerformed(new ActionEvent(this, 0, ""));
+                }
+            });
             
             
             // Row two, fill color field and button, opacity slider. (stop 2)
@@ -586,7 +607,13 @@ public class FillToolBar extends AbstractToolBar {
             rowOne.add(opacityPopupButton, gbc);
             opacitySlider.setUI((SliderUI) PaletteSliderUI.createUI(opacitySlider));
             opacitySlider.setScaleFactor(100d);
-            new FigureAttributeEditorHandler<Double>(FILL_OPACITY, opacitySlider, editor);
+            opacitySlider.setAttributeValue(100d);
+            final Action rRow2 = new SelectionGradientOpacityChooserAction(editor, 1, opacitySlider, FILL_GRADIENT);
+            opacitySlider.addChangeListener(new ChangeListener() {
+                public void stateChanged(ChangeEvent ce) {
+                    rRow2.actionPerformed(new ActionEvent(this, 0, ""));
+                }
+            });
             
             
             
