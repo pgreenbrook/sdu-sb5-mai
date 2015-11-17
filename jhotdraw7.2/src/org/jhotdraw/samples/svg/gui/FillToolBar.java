@@ -14,22 +14,28 @@
 package org.jhotdraw.samples.svg.gui;
 
 import dk.sdu.mmmi.featuretracer.lib.FeatureEntryPoint;
-import org.jhotdraw.text.JavaNumberFormatter;
 import javax.swing.border.*;
-import org.jhotdraw.gui.*;
 import org.jhotdraw.util.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
+import static javax.swing.SwingConstants.SOUTH_EAST;
 import javax.swing.plaf.LabelUI;
 import javax.swing.plaf.SliderUI;
 import org.jhotdraw.app.JHotDrawFeatures;
 import org.jhotdraw.draw.*;
+import static org.jhotdraw.draw.AttributeKeys.FILL_COLOR;
 import org.jhotdraw.draw.action.*;
+import org.jhotdraw.gui.FigureAttributeEditorHandler;
+import org.jhotdraw.gui.JAttributeSlider;
+import org.jhotdraw.gui.JAttributeTextField;
+import org.jhotdraw.gui.JPopupButton;
 import org.jhotdraw.gui.plaf.palette.*;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_OPACITY;
 import org.jhotdraw.text.ColorFormatter;
-import static org.jhotdraw.samples.svg.SVGAttributeKeys.*;
+import org.jhotdraw.text.JavaNumberFormatter;
 
 /**
  * FillToolBar.
@@ -295,9 +301,9 @@ public class FillToolBar extends AbstractToolBar {
                 new FigureAttributeEditorHandler<Color>(FILL_COLOR, defaultAttributes, colorField, editor, true);
                 rowOne.add(colorField, gbc);
             }*/
-            JButton btn = ButtonFactory.createSelectionColorButton(editor,
-                    FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
-                    "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
+            JButton btn = ButtonFactory.createSelectionGradientColorButton(editor,
+                0, FILL_GRADIENT, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
+                "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
             btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
             ((JPopupButton) btn).setAction(null, null);
             gbc = new GridBagConstraints();
@@ -367,9 +373,9 @@ public class FillToolBar extends AbstractToolBar {
                 new FigureAttributeEditorHandler<Color>(FILL_COLOR, defaultAttributes, colorField, editor, true);
                 rowOne.add(colorField, gbc);
             }*/
-            btn = ButtonFactory.createSelectionColorButton(editor,
-                    FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
-                    "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
+            btn = ButtonFactory.createSelectionGradientColorButton(editor,
+                1, FILL_GRADIENT, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
+                "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
             btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
             ((JPopupButton) btn).setAction(null, null);
             gbc = new GridBagConstraints();

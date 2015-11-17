@@ -29,6 +29,7 @@ import static org.jhotdraw.draw.AttributeKeys.*;
 import org.jhotdraw.geom.*;
 import org.jhotdraw.draw.*;
 import org.jhotdraw.gui.JFontChooser;
+import org.jhotdraw.samples.svg.Gradient;
 import org.jhotdraw.samples.svg.gui.FillToolBar;
 
 /**
@@ -802,6 +803,94 @@ public class ButtonFactory {
         a.putValue(Action.SHORT_DESCRIPTION, labels.getToolTipTextProperty("attribute.color.colorChooser"));
         labels.configureToolBarButton(popupButton, labelKey);
         Icon icon = new SelectionColorIcon(editor,
+                attributeKey,
+                labels.getIconProperty(labelKey, ButtonFactory.class).getImage(),
+                colorShape);
+        popupButton.setIcon(icon);
+        popupButton.setDisabledIcon(icon);
+        popupButton.setFocusable(false);
+
+        new SelectionComponentRepainter(editor, popupButton);
+        return popupButton;
+    }
+    
+    /**
+     * Same as the other createSelectionGradientColorButton methods.
+     * Adjusts the color with a certain stop on a gradient instead.
+     * 
+     * @param editor
+     * @param stop
+     * @param attributeKey
+     * @param swatches
+     * @param columnCount
+     * @param labelKey
+     * @param labels
+     * @param defaultAttributes
+     * @param colorShape
+     * @return 
+     */
+    public static JPopupButton createSelectionGradientColorButton(
+            DrawingEditor editor, int stop, AttributeKey<Gradient> attributeKey,
+            java.util.List<ColorIcon> swatches, int columnCount,
+            String labelKey, ResourceBundleUtil labels,
+            Map<AttributeKey, Object> defaultAttributes,
+            Shape colorShape) {
+        final JPopupButton popupButton = new JPopupButton();
+        popupButton.setPopupAlpha(1f);
+        if (defaultAttributes == null) {
+            defaultAttributes = new HashMap<AttributeKey, Object>();
+        }
+
+        popupButton.setColumnCount(columnCount, false);
+        boolean hasNullColor = false;
+        for (ColorIcon swatch : swatches) {
+            AttributeAction a;
+            HashMap<AttributeKey, Object> attributes = new HashMap<AttributeKey, Object>(defaultAttributes);
+            attributes.put(attributeKey, swatch.getColor());
+            if (swatch.getColor() == null) {
+                hasNullColor = true;
+            }
+            popupButton.add(a =
+                    new SelectionGradientColorChooserAction(
+                    editor,
+                    stop,
+                    attributeKey,
+                    labels.getToolTipTextProperty(labelKey),
+                    swatch));
+            a.putValue(Action.SHORT_DESCRIPTION, swatch.getName());
+        }
+
+        // No color
+        if (!hasNullColor) {
+            AttributeAction a;
+            HashMap<AttributeKey, Object> attributes = new HashMap<AttributeKey, Object>(defaultAttributes);
+            attributes.put(attributeKey, null);
+            popupButton.add(a =
+                    new SelectionGradientColorChooserAction(
+                    editor,
+                    stop,
+                    attributeKey,
+                    labels.getToolTipTextProperty("attribute.color.noColor"),
+                    new ColorIcon(null, labels.getToolTipTextProperty("attribute.color.noColor"))));
+            a.putValue(Action.SHORT_DESCRIPTION, labels.getToolTipTextProperty("attribute.color.noColor"));
+        }
+        // Color chooser
+        ImageIcon chooserIcon = new ImageIcon(
+                ButtonFactory.class.getResource("/org/jhotdraw/draw/action/images/attribute.color.colorChooser.png"));
+        Action a;
+        popupButton.add(
+                a = new SelectionGradientColorChooserAction(
+                editor,
+                stop,
+                attributeKey,
+                labels.getToolTipTextProperty("attribute.color.colorChooser"),
+                chooserIcon,
+                defaultAttributes,
+                true));
+        a.putValue(Action.SHORT_DESCRIPTION, labels.getToolTipTextProperty("attribute.color.colorChooser"));
+        labels.configureToolBarButton(popupButton, labelKey);
+        Icon icon = new SelectionGradientColorIcon(editor,
+                stop,
                 attributeKey,
                 labels.getIconProperty(labelKey, ButtonFactory.class).getImage(),
                 colorShape);
