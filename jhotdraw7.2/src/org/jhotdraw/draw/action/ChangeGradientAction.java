@@ -97,6 +97,7 @@ public class ChangeGradientAction extends AbstractSelectedAction {
                 }
             };
             fireUndoableEditHappened(edit);
+            getView().setHandleDetailLevel(-1);
             getView().repaintHandles();
             f.changed();
         }
