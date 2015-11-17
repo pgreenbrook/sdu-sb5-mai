@@ -136,6 +136,7 @@ public class SVGGroupFigure extends GroupFigure implements SVGFigure {
             case 0:
                 TransformHandleKit.addGroupTransformHandles(this, handles);
                 handles.add(new LinkHandle(this));
+                GradientHandleKit.addGradientHandles(this, handles);
                 break;
         }
         return handles;

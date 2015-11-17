@@ -213,6 +213,7 @@ public class SVGEllipseFigure extends SVGAttributedFigure implements SVGFigure {
             case 0:
                 ResizeHandleKit.addResizeHandles(this, handles);
                 handles.add(new LinkHandle(this));
+                GradientHandleKit.addGradientHandles(this, handles);
                 break;
             case 1:
                 TransformHandleKit.addTransformHandles(this, handles);

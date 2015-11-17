@@ -110,6 +110,7 @@ public abstract class AbstractCompositeFigure
         if (detailLevel == 0) {
         handles.add(new BoundsOutlineHandle(this, true, false));
             TransformHandleKit.addScaleMoveTransformHandles(this, handles);
+            GradientHandleKit.addGradientHandles(this, handles);
         }
         return handles;
     }

@@ -341,6 +341,7 @@ public class SVGPathFigure extends AbstractAttributedCompositeFigure implements 
                     handles.addAll(((SVGBezierFigure) child).createHandles(this, detailLevel));
                 }
                 handles.add(new LinkHandle(this));
+                GradientHandleKit.addGradientHandles(this, handles);
                 break;
             case 1:
                 TransformHandleKit.addTransformHandles(this, handles);

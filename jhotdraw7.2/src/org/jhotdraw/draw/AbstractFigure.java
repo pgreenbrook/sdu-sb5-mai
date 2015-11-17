@@ -356,6 +356,7 @@ public abstract class AbstractFigure
                 break;
             case 0:
                 ResizeHandleKit.addResizeHandles(this, handles);
+                GradientHandleKit.addGradientHandles(this, handles);
                 break;
         }
         return handles;
