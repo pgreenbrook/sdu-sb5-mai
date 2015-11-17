@@ -469,9 +469,9 @@ public class FillToolBar extends AbstractToolBar {
                 new FigureAttributeEditorHandler<Color>(FILL_COLOR, defaultAttributes, colorField, editor, true);
                 rowOne.add(colorField, gbc);
             }*/
-            JButton btn = ButtonFactory.createSelectionColorButton(editor,
-                    FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
-                    "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
+            JButton btn = ButtonFactory.createSelectionGradientColorButton(editor,
+                0, FILL_GRADIENT, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
+                "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
             btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
             ((JPopupButton) btn).setAction(null, null);
             gbc = new GridBagConstraints();
@@ -541,9 +541,9 @@ public class FillToolBar extends AbstractToolBar {
                 new FigureAttributeEditorHandler<Color>(FILL_COLOR, defaultAttributes, colorField, editor, true);
                 rowOne.add(colorField, gbc);
             }*/
-            btn = ButtonFactory.createSelectionColorButton(editor,
-                    FILL_COLOR, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
-                    "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
+            btn = ButtonFactory.createSelectionGradientColorButton(editor,
+                1, FILL_GRADIENT, ButtonFactory.HSV_COLORS, ButtonFactory.HSV_COLORS_COLUMN_COUNT,
+                "attribute.fillColor", labels, defaultAttributes, new Rectangle(3, 3, 10, 10));
             btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
             ((JPopupButton) btn).setAction(null, null);
             gbc = new GridBagConstraints();
