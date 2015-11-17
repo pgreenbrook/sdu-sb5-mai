@@ -20,7 +20,7 @@ import org.jhotdraw.samples.svg.gui.FillToolBar.GradientType;
 
 /**
  *
- * @author peter
+ * @author Peter G. Andersen <peand13@student.sdu.dk>
  */
 public class ChangeGradientAction extends AbstractSelectedAction {
 

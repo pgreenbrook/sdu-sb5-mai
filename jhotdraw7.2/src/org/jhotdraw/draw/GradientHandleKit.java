@@ -17,7 +17,7 @@ import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
 
 /**
  *
- * @author peter
+ * @author Peter G. Andersen <peand13@student.sdu.dk>
  */
 public class GradientHandleKit {
     
