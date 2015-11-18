@@ -45,7 +45,7 @@ public class ChangeGradientAction extends AbstractSelectedAction {
                 LinearGradient linearGradient = new LinearGradient();
                 linearGradient.setRelativeToFigureBounds(true);
                 linearGradient.setGradientVector(0.6, 0.5, 0.4, 0.5);
-                linearGradient.setStops(new double[]{0.4, 0.6}, new Color[]{Color.BLUE, Color.RED}, new double[]{1.0, 1.0});
+                linearGradient.setStops(new double[]{0, 1}, new Color[]{Color.BLUE, Color.RED}, new double[]{1.0, 1.0});
                 linearGradient.setTransform(AffineTransform.getRotateInstance(0.0));
                 g = linearGradient;
                 break;
@@ -54,7 +54,7 @@ public class ChangeGradientAction extends AbstractSelectedAction {
                 RadialGradient radialGradient = new RadialGradient();
                 radialGradient.setRelativeToFigureBounds(true);
                 radialGradient.setGradientCircle(0.6, 0.5, 0.4);
-                radialGradient.setStops(new double[]{0.4, 0.6}, new Color[]{Color.BLUE, Color.RED}, new double[]{1.0, 1.0});
+                radialGradient.setStops(new double[]{0, 1}, new Color[]{Color.BLUE, Color.RED}, new double[]{1.0, 1.0});
                 radialGradient.setTransform(AffineTransform.getRotateInstance(0.0));
                 g = radialGradient;
                 break;
