@@ -282,7 +282,7 @@ public class FillToolBar extends AbstractToolBar {
             FILL_GRADIENT.set(defaultAttributes, null);
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
-            gbc.insets = new Insets(0, 3, 0, 0);
+            gbc.insets = new Insets(3, 3, 0, 0);
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             JLabel label = new JLabel();
@@ -340,6 +340,7 @@ public class FillToolBar extends AbstractToolBar {
             // Row two, fill color button, opacity slider. (stop 2)
             FILL_GRADIENT.set(defaultAttributes, null);
             gbc.gridx = 0;
+            gbc.insets = new Insets(3, 3, 0, 0);
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             label = new JLabel();
@@ -358,6 +359,7 @@ public class FillToolBar extends AbstractToolBar {
             gbc = new GridBagConstraints();
             gbc.gridx = 2;
             gbc.gridwidth = 2;
+            gbc.insets = new Insets(3, 0, 0, 0);
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             rowOne.add(btn, gbc);
             
@@ -377,7 +379,7 @@ public class FillToolBar extends AbstractToolBar {
             opacityPopupButton.setPopupAnchor(SOUTH_EAST);
             new SelectionComponentRepainter(editor, opacityPopupButton);
             gbc = new GridBagConstraints();
-            gbc.insets = new Insets(0, 3, 0, 0);
+            gbc.insets = new Insets(3, 3, 0, 0);
             gbc.gridx = 4;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             gbc.weighty = 1f;
@@ -397,8 +399,8 @@ public class FillToolBar extends AbstractToolBar {
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             panel.add(rowOne, gbc);
-            gbc.insets = new Insets(3, 0, 0, 0);
             gbc = new GridBagConstraints();
+            gbc.insets = new Insets(3, 0, 0, 0);
             gbc.gridy = 1;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             panel.add(rowTwo, gbc);
@@ -417,7 +419,7 @@ public class FillToolBar extends AbstractToolBar {
             FILL_GRADIENT.set(defaultAttributes, null);
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = 0;
-            gbc.insets = new Insets(0, 3, 0, 0);
+            gbc.insets = new Insets(3, 3, 0, 0);
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             JLabel label = new JLabel();
@@ -474,6 +476,7 @@ public class FillToolBar extends AbstractToolBar {
             // Row two, fill color button, opacity slider. (stop 2)
             FILL_GRADIENT.set(defaultAttributes, null);
             gbc.gridx = 0;
+            gbc.insets = new Insets(3, 3, 0, 0);
             gbc.fill = GridBagConstraints.HORIZONTAL;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             label = new JLabel();
@@ -490,6 +493,7 @@ public class FillToolBar extends AbstractToolBar {
             btn.setUI((PaletteButtonUI) PaletteButtonUI.createUI(btn));
             ((JPopupButton) btn).setAction(null, null);
             gbc = new GridBagConstraints();
+            gbc.insets = new Insets(3, 0, 0, 0);
             gbc.gridx = 2;
             gbc.gridwidth = 2;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
@@ -511,7 +515,7 @@ public class FillToolBar extends AbstractToolBar {
             opacityPopupButton.setPopupAnchor(SOUTH_EAST);
             new SelectionComponentRepainter(editor, opacityPopupButton);
             gbc = new GridBagConstraints();
-            gbc.insets = new Insets(0, 3, 0, 0);
+            gbc.insets = new Insets(3, 3, 0, 0);
             gbc.gridx = 4;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             gbc.weighty = 1f;
@@ -531,7 +535,6 @@ public class FillToolBar extends AbstractToolBar {
             gbc.gridy = 0;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
             panel.add(rowOne, gbc);
-            gbc.insets = new Insets(3, 0, 0, 0);
             gbc = new GridBagConstraints();
             gbc.gridy = 1;
             gbc.anchor = GridBagConstraints.FIRST_LINE_START;
