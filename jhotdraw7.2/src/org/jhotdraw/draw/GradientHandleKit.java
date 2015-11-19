@@ -214,8 +214,10 @@ public class GradientHandleKit {
             double b = g.getCY() - g.getFY();
             double c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
             
-            offsets[0] = c;
-            g.setStops(offsets, g.getStopColors(), g.getStopOpacities());
+            if(c < 1) {
+                offsets[0] = c;
+                g.setStops(offsets, g.getStopColors(), g.getStopOpacities());
+            }
             
             if (TRANSFORM.get(owner) != null) {
                 try {
@@ -285,8 +287,10 @@ public class GradientHandleKit {
             double b = g.getCY() - g.getFY();
             double c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
             
-            offsets[0] = c;
-            g.setStops(offsets, g.getStopColors(), g.getStopOpacities());
+            if(c < 1) {
+                offsets[0] = c;
+                g.setStops(offsets, g.getStopColors(), g.getStopOpacities());
+            }
             
             if (TRANSFORM.get(owner) != null) {
                 try {
