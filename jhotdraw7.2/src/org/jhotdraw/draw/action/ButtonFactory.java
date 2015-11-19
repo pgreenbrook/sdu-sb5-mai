@@ -1630,7 +1630,7 @@ public class ButtonFactory {
         popupButton.setFocusable(false);
         popupButton.setText(fillToolBar.getFillState().getPrettyName());
         
-        for (final FillToolBar.GradientType state : FillToolBar.GradientType.values()) {
+        for (final FillToolBar.FillType state : FillToolBar.FillType.values()) {
             popupButton.add(new ChangeGradientAction(editor, state, popupButton) {
                 @Override
                 public void actionPerformed(ActionEvent ae) {

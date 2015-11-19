@@ -16,7 +16,7 @@ import org.jhotdraw.samples.svg.LinearGradient;
 import org.jhotdraw.samples.svg.RadialGradient;
 import org.jhotdraw.samples.svg.SVGAttributeKeys;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
-import org.jhotdraw.samples.svg.gui.FillToolBar.GradientType;
+import org.jhotdraw.samples.svg.gui.FillToolBar.FillType;
 
 /**
  *
@@ -24,10 +24,10 @@ import org.jhotdraw.samples.svg.gui.FillToolBar.GradientType;
  */
 public class ChangeGradientAction extends AbstractSelectedAction {
 
-    private GradientType fillState;
+    private FillType fillState;
     private JPopupButton popupButton;
     
-    public ChangeGradientAction(DrawingEditor editor, GradientType fillState, JPopupButton popupButton) {
+    public ChangeGradientAction(DrawingEditor editor, FillType fillState, JPopupButton popupButton) {
         super(editor);
         this.fillState = fillState;
         this.popupButton = popupButton;
