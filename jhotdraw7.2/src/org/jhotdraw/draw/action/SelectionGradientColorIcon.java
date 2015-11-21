@@ -79,7 +79,7 @@ public class SelectionGradientColorIcon extends javax.swing.ImageIcon {
     public void paintIcon(java.awt.Component c, java.awt.Graphics gr, int x, int y) {
         Graphics2D g = (Graphics2D) gr;
         super.paintIcon(c, g, x, y);
-        Color color;
+        Color color = null;
         DrawingView view = editor.getActiveView();
         Gradient gradient;
         if (view != null && view.getSelectedFigures().size() == 1) {
@@ -88,12 +88,14 @@ public class SelectionGradientColorIcon extends javax.swing.ImageIcon {
             gradient = key.get(editor.getDefaultAttributes());
         }
         
-        int length = gradient.getStopColors().length;
-        if(length > stop) {
-            color = gradient.getStopColors()[stop];
-        }
-        else {
-            color = editor.getDefaultAttribute(FILL_COLOR);
+        if(gradient != null) {
+            int length = gradient.getStopColors().length;
+            if(length > stop) {
+                color = gradient.getStopColors()[stop];
+            }
+            else {
+                color = editor.getDefaultAttribute(FILL_COLOR);
+            }
         }
         
         if (color != null) {

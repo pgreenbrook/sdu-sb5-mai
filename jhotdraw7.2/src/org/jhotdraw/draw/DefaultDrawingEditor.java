@@ -23,6 +23,7 @@ import java.util.*;
 import java.io.*;
 import javax.swing.JComponent;
 import static org.jhotdraw.draw.AttributeKeys.*;
+import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
 
 /**
  * DefaultDrawingEditor.
@@ -160,7 +161,12 @@ public class DefaultDrawingEditor extends AbstractBean implements DrawingEditor,
     @SuppressWarnings("unchecked")
     public void applyDefaultAttributesTo(Figure f) {
         for (Map.Entry<AttributeKey, Object> entry : defaultAttributes.entrySet()) {
-            entry.getKey().basicSet(f, entry.getValue());
+            if(entry.getKey().getKey().equals(FILL_GRADIENT.getKey())) {
+                entry.getKey().basicSetClone(f, entry.getValue());
+            }
+            else {
+                entry.getKey().basicSet(f, entry.getValue());
+            }
         }
     }
 

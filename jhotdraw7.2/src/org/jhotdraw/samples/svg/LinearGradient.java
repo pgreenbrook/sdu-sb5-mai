@@ -238,4 +238,13 @@ public class LinearGradient implements Gradient {
                 Arrays.equals(stopColors, that.stopColors) &&
                 transform.equals(that.transform);
     }
+    
+    public static LinearGradient createDefaultGradient() {
+        LinearGradient g = new LinearGradient();
+        g.setRelativeToFigureBounds(true);
+        g.setGradientVector(0.6, 0.5, 0.4, 0.5);
+        g.setStops(new double[]{0, 1}, new Color[]{Color.BLUE, Color.RED}, new double[]{1.0, 1.0});
+        g.setTransform(AffineTransform.getRotateInstance(0.0));
+        return g;
+    }
 }
