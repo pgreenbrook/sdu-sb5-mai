@@ -16,16 +16,14 @@ import org.jhotdraw.samples.svg.SVGAttributeKeys;
 import static org.jhotdraw.samples.svg.SVGAttributeKeys.FILL_GRADIENT;
 
 /**
- *
+ * Utility methods to create handles which control the gradients of a Figure.
+ * No handles are added if the figure has no gradient as fill.
+ * 
  * @author Peter G. Andersen <peand13@student.sdu.dk>
  */
 public class GradientHandleKit {
     
-    public GradientHandleKit() {
-        
-    }
-    
-    static public void addGradientHandles(Figure f, Collection<Handle> handles) {
+    public static void addGradientHandles(Figure f, Collection<Handle> handles) {
         Gradient g = f.getAttribute(SVGAttributeKeys.FILL_GRADIENT);
         
         if(g == null) {
@@ -42,19 +40,63 @@ public class GradientHandleKit {
         }
     }
     
-    private static class LinearGradientHandleOne extends AbstractHandle {
+    
+    private static abstract class AbstractGradientHandle extends AbstractHandle {
         
-        public LinearGradientHandleOne(Figure owner) {
+        public AbstractGradientHandle(Figure owner) {
             super(owner);
         }
-
+        
         protected Rectangle basicGetBounds() {
             Rectangle r = new Rectangle(locate());
             r.grow(getHandlesize() / 2 + 1, getHandlesize() / 2 + 1);
             return r;
         }
+        
+        protected abstract Point locate();
+        
+        public Point transform(Point2D.Double point) {
+            Figure owner = getOwner();
+            if (TRANSFORM.get(owner) != null) {
+                TRANSFORM.get(owner).transform(point, point);
+            }
+            return view.drawingToView(point);
+        }
+        
+        public void inverseTransform(Point2D.Double point) {
+            Figure owner = getOwner();
+            if (TRANSFORM.get(owner) != null) {
+                try {
+                    TRANSFORM.get(owner).inverseTransform(point, point);
+                } catch (NoninvertibleTransformException ex) {
+                    // Ignore it.
+                }
+            }
+        }
+        
+        public void trackStart(Point anchor, int modifiersEx) {
+            // Do nothing.
+        }
+        
+        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
+            // TODO fireUndoableEdit
+        }
+        
+        @Override
+        public void draw(Graphics2D g) {
+            drawCircle(g, Color.ORANGE, Color.BLACK);
+        }
+    }
     
-        private Point locate() {
+    
+    
+    private static class LinearGradientHandleOne extends AbstractGradientHandle {
+        
+        public LinearGradientHandleOne(Figure owner) {
+            super(owner);
+        }
+    
+        protected Point locate() {
             Figure owner = getOwner();
             LinearGradient g = (LinearGradient) owner.getAttribute(FILL_GRADIENT);
             
@@ -63,13 +105,7 @@ public class GradientHandleKit {
                 r.x + (owner.getPreferredSize().getWidth() * g.getX1()),
                 r.y + (owner.getPreferredSize().getHeight() * g.getY1())
             );
-            if (TRANSFORM.get(owner) != null) {
-                TRANSFORM.get(owner).transform(p, p);
-            }
-            return view.drawingToView(p);
-        }
-
-        public void trackStart(Point anchor, int modifiersEx) {
+            return transform(p);
         }
 
         public void trackStep(Point anchor, Point lead, int modifiersEx) {
@@ -83,40 +119,18 @@ public class GradientHandleKit {
             double y = (p.y - owner.getBounds().y) / owner.getPreferredSize().getHeight();
             g.setGradientVector(x, y, g.getX2(), g.getY2());
             
-            if (TRANSFORM.get(owner) != null) {
-                try {
-                    TRANSFORM.get(owner).inverseTransform(p, p);
-                }
-                catch (NoninvertibleTransformException ex) {
-                }
-                owner.changed();
-            }
+            inverseTransform(p);
+            owner.changed();
         }
-
-        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
-            // TODO fireUndoableEdit
-        }
-
-        @Override
-        public void draw(Graphics2D g) {
-            drawCircle(g, Color.ORANGE, Color.BLACK);
-        }
-        
     }
     
-    private static class LinearGradientHandleTwo extends AbstractHandle {
+    private static class LinearGradientHandleTwo extends AbstractGradientHandle {
         
         public LinearGradientHandleTwo(Figure owner) {
             super(owner);
         }
-
-        protected Rectangle basicGetBounds() {
-            Rectangle r = new Rectangle(locate());
-            r.grow(getHandlesize() / 2 + 1, getHandlesize() / 2 + 1);
-            return r;
-        }
     
-        private Point locate() {
+        protected Point locate() {
             Figure owner = getOwner();
             LinearGradient g = (LinearGradient) owner.getAttribute(FILL_GRADIENT);
             
@@ -125,14 +139,7 @@ public class GradientHandleKit {
                 r.x + (owner.getPreferredSize().getWidth() * g.getX2()),
                 r.y + (owner.getPreferredSize().getHeight() * g.getY2())
             );
-            if (TRANSFORM.get(owner) != null) {
-                TRANSFORM.get(owner).transform(p, p);
-            }
-            return view.drawingToView(p);
-        }
-
-        public void trackStart(Point anchor, int modifiersEx) {
-            
+            return transform(p);
         }
 
         public void trackStep(Point anchor, Point lead, int modifiersEx) {
@@ -146,40 +153,18 @@ public class GradientHandleKit {
             double y = (p.y - owner.getBounds().y) / owner.getPreferredSize().getHeight();
             g.setGradientVector(g.getX1(), g.getY1(), x, y);
             
-            if (TRANSFORM.get(owner) != null) {
-                try {
-                    TRANSFORM.get(owner).inverseTransform(p, p);
-                }
-                catch (NoninvertibleTransformException ex) {
-                }
-            }
+            inverseTransform(p);
             owner.changed();
         }
-
-        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
-            // TODO fireUndoableEdit
-        }
-
-        @Override
-        public void draw(Graphics2D g) {
-            drawCircle(g, Color.ORANGE, Color.BLACK);
-        }
-        
     }
     
-    private static class RadialGradientCenterHandle extends AbstractHandle {
+    private static class RadialGradientCenterHandle extends AbstractGradientHandle {
         
         public RadialGradientCenterHandle(Figure owner) {
             super(owner);
         }
-
-        protected Rectangle basicGetBounds() {
-            Rectangle r = new Rectangle(locate());
-            r.grow(getHandlesize() / 2 + 1, getHandlesize() / 2 + 1);
-            return r;
-        }
     
-        private Point locate() {
+        protected Point locate() {
             Figure owner = getOwner();
             RadialGradient g = (RadialGradient) owner.getAttribute(FILL_GRADIENT);
             
@@ -188,14 +173,7 @@ public class GradientHandleKit {
                 r.x + (owner.getPreferredSize().getWidth() * g.getCX()),
                 r.y + (owner.getPreferredSize().getHeight() * g.getCY())
             );
-            if (TRANSFORM.get(owner) != null) {
-                TRANSFORM.get(owner).transform(p, p);
-            }
-            return view.drawingToView(p);
-        }
-
-        public void trackStart(Point anchor, int modifiersEx) {
-            
+            return transform(p);
         }
 
         public void trackStep(Point anchor, Point lead, int modifiersEx) {
@@ -213,46 +191,24 @@ public class GradientHandleKit {
             double a = g.getCX() - g.getFX();
             double b = g.getCY() - g.getFY();
             double c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-            
+           
             if(c < 1) {
                 offsets[0] = c;
                 g.setStops(offsets, g.getStopColors(), g.getStopOpacities());
             }
             
-            if (TRANSFORM.get(owner) != null) {
-                try {
-                    TRANSFORM.get(owner).inverseTransform(p, p);
-                }
-                catch (NoninvertibleTransformException ex) {
-                }
-            }
+            inverseTransform(p);
             owner.changed();
         }
-
-        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
-            // TODO fireUndoableEdit
-        }
-
-        @Override
-        public void draw(Graphics2D g) {
-            drawCircle(g, Color.ORANGE, Color.BLACK);
-        }
-        
     }
     
-    private static class RadialGradientFocalPointHandle extends AbstractHandle {
+    private static class RadialGradientFocalPointHandle extends AbstractGradientHandle {
         
         public RadialGradientFocalPointHandle(Figure owner) {
             super(owner);
         }
-
-        protected Rectangle basicGetBounds() {
-            Rectangle r = new Rectangle(locate());
-            r.grow(getHandlesize() / 2 + 1, getHandlesize() / 2 + 1);
-            return r;
-        }
     
-        private Point locate() {
+        protected Point locate() {
             Figure owner = getOwner();
             RadialGradient g = (RadialGradient) owner.getAttribute(FILL_GRADIENT);
             
@@ -261,14 +217,7 @@ public class GradientHandleKit {
                 r.x + (owner.getPreferredSize().getWidth() * g.getFX()),
                 r.y + (owner.getPreferredSize().getHeight() * g.getFY())
             );
-            if (TRANSFORM.get(owner) != null) {
-                TRANSFORM.get(owner).transform(p, p);
-            }
-            return view.drawingToView(p);
-        }
-
-        public void trackStart(Point anchor, int modifiersEx) {
-            
+            return transform(p);
         }
 
         public void trackStep(Point anchor, Point lead, int modifiersEx) {
@@ -292,24 +241,8 @@ public class GradientHandleKit {
                 g.setStops(offsets, g.getStopColors(), g.getStopOpacities());
             }
             
-            if (TRANSFORM.get(owner) != null) {
-                try {
-                    TRANSFORM.get(owner).inverseTransform(p, p);
-                }
-                catch (NoninvertibleTransformException ex) {
-                }
-            }
+            inverseTransform(p);
             owner.changed();
         }
-
-        public void trackEnd(Point anchor, Point lead, int modifiersEx) {
-            // TODO fireUndoableEdit
-        }
-
-        @Override
-        public void draw(Graphics2D g) {
-            drawCircle(g, Color.ORANGE, Color.BLACK);
-        }
-        
     }
 }
